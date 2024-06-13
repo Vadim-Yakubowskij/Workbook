@@ -1,0 +1,129 @@
+﻿<Window
+    x:Class="Jecub.App.UpdateWin"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Jecub.App"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="600"
+    Height="700"
+    MinWidth="600"
+    MinHeight="700"
+    MaxWidth="600"
+    MaxHeight="700"
+    mc:Ignorable="d">
+    <Grid Background="#A6D0C7">
+        <Border
+            MinWidth="480"
+            MinHeight="620"
+            MaxWidth="480"
+            MaxHeight="620"
+            Margin="50,30,50,0"
+            Padding="20"
+            VerticalAlignment="Top"
+            Background="#036152"
+            CornerRadius="35">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="Gray" />
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontSize="30"
+                    FontWeight="Bold"
+                    Foreground="#DFEADE"
+                    Text="Изменение задачи" />
+                <StackPanel
+                    Margin="10,40,0,0"
+                    Background="White"
+                    Orientation="Horizontal">
+                    <TextBlock FontSize="25" Text="Имя задачи: " />
+                    <TextBox
+                        x:Name="NameBox"
+                        Width="200"
+                        FontSize="20"
+                        Language="ru-ru"
+                        MaxLength="100"
+                        SpellCheck.IsEnabled="True"
+                        Text="{Binding SelectedTask.Name}" />
+                </StackPanel>
+                <StackPanel
+                    Margin="10,40,0,0"
+                    Background="White"
+                    Orientation="Horizontal">
+                    <TextBlock FontSize="25" Text="Дата задачи: " />
+                    <DatePicker
+                        Width="200"
+                        FontSize="20"
+                        SelectedDate="{Binding SelectedTask.Date_time}" />
+                </StackPanel>
+                <StackPanel Margin="10,10,10,40" Orientation="Vertical">
+                    <TextBlock
+                        FontSize="25"
+                        FontWeight="Bold"
+                        Foreground="#DFEADE"
+                        Text="Доп. инфо. задачи: " />
+                    <ScrollViewer PreviewMouseWheel="MenuPanel3_PreviewMouseWheel" VerticalScrollBarVisibility="Auto">
+                        <TextBlock
+                            Height="220"
+                            FontSize="25"
+                            Foreground="#DFEADE"
+                            Text="{Binding SelectedTask.More_details}"
+                            TextWrapping="Wrap" RenderTransformOrigin="0.5,0.5" >
+                            <TextBlock.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform AngleX="-0.822"/>
+                                    <RotateTransform/>
+                                    <TranslateTransform X="-1.579"/>
+                                </TransformGroup>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </ScrollViewer>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button
+                        x:Name="CloseButton"
+                        Width="90"
+                        Height="70"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Right"
+                        Background="#DFEADE"
+                        BorderBrush="#FAEBD7"
+                        Click="Button_Click"
+                        FontSize="30">
+                        <Image
+                            Width="55"
+                            Height="40"
+                            RenderTransformOrigin="0.5,0.5"
+                            Source="/Left.png">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="-1" />
+                                    <SkewTransform />
+                                    <RotateTransform />
+                                    <TranslateTransform />
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                    </Button>
+                    <Button
+                        x:Name="UpdateTaskButton"
+                        Width="90"
+                        Height="70"
+                        Margin="260,0,0,0"
+                        HorizontalAlignment="Left"
+                        Background="#DFEADE"
+                        BorderBrush="#FAEBD7"
+                        Command="{Binding UpadateTaskCommand}"
+                        FontSize="30">
+                        <Image
+                            Width="59"
+                            Height="49"
+                            Source="C:\Users\Вадим\OneDrive\Документы\GitHub\node1\node\Update.png" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
