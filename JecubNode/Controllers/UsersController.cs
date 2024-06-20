@@ -20,28 +20,34 @@ namespace Jecub.Controllers
             _context = context;
         }
 
-        // POST: api/Users/register
+        // POST: api/Users/register 
         [HttpPost("/register")]
-        public async Task<IActionResult> Register(string login, string password)
+        public async Task<IActionResult> Register([FromBody] User user)
         {
-            _context.Users.Add(new User() {Login = login, Password = password });
+            _context.Users.Add(new User() { Login = user.Login, Password = user.Password });
             await _context.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        // POST: api/Users/login
-        [HttpPost("/login")]
-        public async Task<ActionResult<int>> Login(string login, string password)
-        {
-
-            var user = _context.Users.ToList().Find(e => e.Login == login && e.Password == password);
-            if (user == null)
+            await Console.Out.WriteLineAsync(string.Join(" ", _context.Users.ToList()));
+            var userFound = _context.Users.ToList().Find(e => e.Login == user.Login && e.Password == user.Password);
+            if (userFound == null)
             {
                 return NotFound();
             }
 
-            return Ok(user.Id);
+            return Ok(userFound.Id);
+        }
+
+        // POST: api/Users/login 
+        [HttpPost("/login")]
+        public async Task<ActionResult<int>> Login([FromBody] User user)
+        {
+
+            var userFound = _context.Users.ToList().Find(e => e.Login == user.Login && e.Password == user.Password);
+            if (userFound == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(userFound.Id);
 
         }
 

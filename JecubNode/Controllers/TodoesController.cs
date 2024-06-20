@@ -21,14 +21,14 @@ namespace Jecub.Controllers
         }
 
         // GET: api/Todoes
-        [HttpGet]
+        [HttpGet("/Read")]
         public async Task<ActionResult<IEnumerable<Todo>>> GetTask()
         {
             return Ok(await _context.Task.ToListAsync());
         }
 
         // GET: api/Todoes/5
-        [HttpGet("{id}")]
+        [HttpGet("/ReadByID")]
         public async Task<ActionResult<Todo>> GetTodo(int id)
         {
             var todo = await _context.Task.FindAsync(id);
@@ -43,7 +43,7 @@ namespace Jecub.Controllers
 
         // PUT: api/Todoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("/Update")]
         public async Task<IActionResult> PutTodo(int id, Todo todo)
         {
             if (id != todo.Id)
@@ -74,7 +74,7 @@ namespace Jecub.Controllers
 
         // POST: api/Todoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("/Create")]
         public async Task<ActionResult<Todo>> PostTodo(Todo todo)
         {
             _context.Task.Add(todo);
@@ -84,7 +84,7 @@ namespace Jecub.Controllers
         }
 
         // DELETE: api/Todoes/5
-        [HttpDelete("{id}")]
+        [HttpDelete("/Delete")]
         public async Task<IActionResult> DeleteTodo(int id)
         {
             var todo = await _context.Task.FindAsync(id);

@@ -8,7 +8,7 @@ internal class Program
 
     private static async Task Main(string[] args)
     {
-        client.BaseAddress = new Uri("http://localhost:5212/");
+        client.BaseAddress = new Uri("http://localhost:5212");
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
@@ -16,24 +16,19 @@ internal class Program
         try
         {
             // Create a new product
-            User user = new User
+            Todo todo = new Todo
             {
                 Id = 0,
-                Login = "Roman",
-                Password = "12345"
+                Date_time = "10.09.2024",
+                Name = "Пока",
+                More_details = "Привет"
             };
 
             // Get the product
-            int userId = await Register(user);
+            int TodoId = await Post(todo);
 
-            await Console.Out.WriteLineAsync("РЕГАЕМСЯ");
-            await Console.Out.WriteLineAsync(Convert.ToString(userId));
-
-            userId = await Login(user);
-            await Console.Out.WriteLineAsync("ЛОГИНИМСЯ");
-            await Console.Out.WriteLineAsync(Convert.ToString(userId));
-
-
+            await Console.Out.WriteLineAsync("Post");
+            await Console.Out.WriteLineAsync(Convert.ToString(TodoId));
 
         }
         catch (Exception e)
@@ -58,27 +53,25 @@ internal class Program
         return user;
     }
 
-    static async Task<int> Register(User user)
+    static async Task<int> Post(Todo todo)
     {
-        HttpClient client = new HttpClient();
-
         HttpResponseMessage response = await client.PostAsJsonAsync(
-            "register", user);
+            "/Create", todo);
         response.EnsureSuccessStatusCode();
 
-        int userResponse = 0;
+        int todoResponse = 0;
         if (response.IsSuccessStatusCode)
         {
-            userResponse = DataSerializer.Deserialize<int>(await response.Content.ReadAsStringAsync())!;
+            todoResponse = DataSerializer.Deserialize<int>(await response.Content.ReadAsStringAsync())!;
         }
-        return userResponse;
+        return todoResponse;
     }
 
     static async Task<int> Login(User user)
     {
 
         HttpResponseMessage response = await client.PostAsJsonAsync(
-            "login", user);
+            "/login", user);
         response.EnsureSuccessStatusCode();
 
         int userResponse = 0;
