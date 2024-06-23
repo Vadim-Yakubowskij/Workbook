@@ -10,6 +10,7 @@ using JecubNode;
 internal class Program
 {
     public static readonly HttpClient client = new HttpClient();
+
     static async Task<User> GetUserAsync(string path)
     {
         User user = null;

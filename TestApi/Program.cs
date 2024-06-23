@@ -25,7 +25,7 @@ internal class Program
             };
 
             // Get the product
-            int TodoId = await Post(todo);
+            int TodoId = await PostTodo(todo);
 
             await Console.Out.WriteLineAsync("Post");
             await Console.Out.WriteLineAsync(Convert.ToString(TodoId));
@@ -38,47 +38,49 @@ internal class Program
 
         Console.ReadLine();
     }
+         public static async Task<Todo> GetTaskAsync(string path)
+         {
+                Todo todo = null;
 
 
-    static async Task<User> GetUserAsync(string path)
-    {
-        User user = null;
+                HttpResponseMessage response = await client.GetAsync(path);
+                if (response.IsSuccessStatusCode)
+                {
+                    todo = DataSerializer.Deserialize<Todo>(await response.Content.ReadAsStringAsync());
+                }
+                return todo;
+         }
 
+            public static async Task<List<Todo>> GetTodo()
+            {
 
-        HttpResponseMessage response = await client.GetAsync(path);
-        if (response.IsSuccessStatusCode)
-        {
-            user = DataSerializer.Deserialize<User>(await response.Content.ReadAsStringAsync())!;
-        }
-        return user;
-    }
+                HttpResponseMessage response = await client.GetAsync(
+                    "/Read");
+                response.EnsureSuccessStatusCode();
 
-    static async Task<int> Post(Todo todo)
-    {
-        HttpResponseMessage response = await client.PostAsJsonAsync(
-            "/Create", todo);
-        response.EnsureSuccessStatusCode();
+                List<Todo> TodoResponse = new List<Todo>();
+                if (response.IsSuccessStatusCode)
+                {
+                    TodoResponse = DataSerializer.Deserialize<List<Todo>>(await response.Content.ReadAsStringAsync());
+                }
+                return TodoResponse;
+            }
 
-        int todoResponse = 0;
-        if (response.IsSuccessStatusCode)
-        {
-            todoResponse = DataSerializer.Deserialize<int>(await response.Content.ReadAsStringAsync())!;
-        }
-        return todoResponse;
-    }
+            public static async Task<int> PostTodo(Todo todo)
+            {
 
-    static async Task<int> Login(User user)
-    {
+                HttpResponseMessage response = await client.PostAsync(
+                    "/Create", JsonContent.Create(todo));
+                response.EnsureSuccessStatusCode();
 
-        HttpResponseMessage response = await client.PostAsJsonAsync(
-            "/login", user);
-        response.EnsureSuccessStatusCode();
+                int SongResponse = 0;
+                if (response.IsSuccessStatusCode)
+                {
+                    SongResponse = DataSerializer.Deserialize<int>(await response.Content.ReadAsStringAsync());
+                }
+                return SongResponse;
+            }
 
-        int userResponse = 0;
-        if (response.IsSuccessStatusCode)
-        {
-            userResponse = DataSerializer.Deserialize<int>(await response.Content.ReadAsStringAsync())!;
-        }
-        return userResponse;
-    }
+    
 }
+
