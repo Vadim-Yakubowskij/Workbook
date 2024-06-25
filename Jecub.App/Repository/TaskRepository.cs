@@ -1,4 +1,7 @@
-﻿namespace JecubNode.Repository
+﻿using System.Net.Http;
+using System.Net.Http.Json;
+
+namespace JecubNode.Repository
 {
     public class TaskRepository
     {

@@ -1,6 +1,4 @@
-﻿using DataBase.Repository;
-using node;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,27 +15,22 @@ using System.Windows.Shapes;
 namespace Jecub.App
 {
     /// <summary>
-    /// Логика взаимодействия для RegisterWindow.xaml
+    /// Interaction logic for LoginWindow.xaml
     /// </summary>
-    public partial class RegisterWindow : Window
+    public partial class LoginWindow : Window
     {
         RegisterViewModel vm;
-        public RegisterWindow()
+        public LoginWindow()
         {
             InitializeComponent();
             vm = new RegisterViewModel();
             DataContext = vm;
         }
 
-        private void TextBox_ColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
-        {
-
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            LoginWindow loginWindow = new LoginWindow();
-            loginWindow.Show();
+            RegisterWindow registerWindow = new RegisterWindow();
+            registerWindow.Show();
             Hide();
         }
     }

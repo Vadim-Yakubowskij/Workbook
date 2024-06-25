@@ -7,12 +7,18 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using JecubNode;
 
-internal class Program
+public class UserRepository
 {
-    public static readonly HttpClient client = new HttpClient();
+    public  readonly HttpClient client = new HttpClient();
 
-    static async Task<User> GetUserAsync(string path)
+
+
+    public  async Task<User> GetUserAsync(string path)
     {
+        client.BaseAddress = new Uri("http://localhost:5212");
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
         User user = null;
 
 
@@ -24,8 +30,12 @@ internal class Program
         return user;
     }
 
-    static async Task<int> Register(User user)
+    public  async Task<int> Register(User user)
     {
+        client.BaseAddress = new Uri("http://localhost:5212");
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
         HttpResponseMessage response = await client.PostAsJsonAsync(
             "/register", user);
         response.EnsureSuccessStatusCode();
@@ -38,9 +48,12 @@ internal class Program
         return userResponse;
     }
 
-    static async Task<int> Login(User user)
+    public  async Task<int> Login(User user)
     {
-
+        client.BaseAddress = new Uri("http://localhost:5212");
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
         HttpResponseMessage response = await client.PostAsJsonAsync(
             "/login", user);
         response.EnsureSuccessStatusCode();

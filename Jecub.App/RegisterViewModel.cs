@@ -7,16 +7,26 @@ using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Xml.Linq;
 using JecubNode;
+using JecubNode.Repository;
+using System.Windows;
 
 namespace Jecub.App
 {
-    class RegisterViewModel : ObservableObject
+    public class RegisterViewModel : ObservableObject
     {
-        public string LoginUser { get => _login; set { _login = value; OnPropertyChanged("Login"); } }
+        public string LoginUser { get => _login; set { _login = value; OnPropertyChanged("LoginUser"); } }
         private string _login;
-        public string PasswordUser { get => _password; set { _password = value; OnPropertyChanged("Password"); } }
+        public string PasswordUser { get => _password; set { _password = value; OnPropertyChanged("PasswordUser"); } }
         private string _password;
+        private UserRepository userRepository;
         private RelayCommand registerCommand;
+        private RelayCommand loginCommand;
+
+        public RegisterViewModel()
+        {
+            userRepository = new UserRepository();
+        }
+
         public RelayCommand RegisterCommand
         {
             get
@@ -26,13 +36,32 @@ namespace Jecub.App
                 {
                     User user = new User
                     {
-                        Id = 0,
+                        Id = 65,
                         Login = LoginUser,
                         Password = PasswordUser
                     };
+                    userRepository.Register(user);
 
                         
                     }));
+            }
+        }
+        public RelayCommand LoginCommand
+        {
+            get
+            {
+                return loginCommand ??
+                (loginCommand = new RelayCommand(obj =>
+                {
+                    User user = new User
+                    {
+                        Login = LoginUser,
+                        Password = PasswordUser
+                    };
+                    userRepository.Login(user);
+                    MessageBox.Show(userRepository.Login(user).ToString());
+
+                }));
             }
         }
 
