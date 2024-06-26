@@ -1,15 +1,20 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace JecubNode.Repository
 {
-    public class TaskRepository
+    public class TodoRepository
     {
         public static readonly HttpClient client = new HttpClient();
-        static async Task<int> Create(User user)
+        public async Task<int> create(Todo todo)
         {
+            client.BaseAddress = new Uri("http://localhost:5212");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage response = await client.PostAsJsonAsync(
-                "/Create", user);
+                "/Create", todo);
             response.EnsureSuccessStatusCode();
 
             int userResponse = 0;
@@ -19,10 +24,14 @@ namespace JecubNode.Repository
             }
             return userResponse;
         }
-        static async Task<int> Read(User user)
+        public async Task<int> read(Todo todo)
         {
+            client.BaseAddress = new Uri("http://localhost:5212");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage response = await client.PostAsJsonAsync(
-                "/Read", user);
+                "/Read", todo);
             response.EnsureSuccessStatusCode();
 
             int userResponse = 0;
@@ -32,10 +41,14 @@ namespace JecubNode.Repository
             }
             return userResponse;
         }
-        static async Task<int> Update(User user)
+        public async Task<int> update(Todo todo)
         {
+            client.BaseAddress = new Uri("http://localhost:5212");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage response = await client.PostAsJsonAsync(
-                "/Update", user);
+                "/Update", todo);
             response.EnsureSuccessStatusCode();
 
             int userResponse = 0;
@@ -45,10 +58,14 @@ namespace JecubNode.Repository
             }
             return userResponse;
         }
-        static async Task<int> Delete(User user)
+        public async Task<int> delete(Todo todo)
         {
+            client.BaseAddress = new Uri("http://localhost:5212");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage response = await client.PostAsJsonAsync(
-                "/Delete", user);
+                "/Delete", todo);
             response.EnsureSuccessStatusCode();
 
             int userResponse = 0;
@@ -58,10 +75,14 @@ namespace JecubNode.Repository
             }
             return userResponse;
         }
-        static async Task<int> ReadByID(User user)
+        public async Task<int> readByID(Todo todo)
         {
+            client.BaseAddress = new Uri("http://localhost:5212");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage response = await client.PostAsJsonAsync(
-                "/ReadByID", user);
+                "/ReadByID", todo);
             response.EnsureSuccessStatusCode();
 
             int userResponse = 0;

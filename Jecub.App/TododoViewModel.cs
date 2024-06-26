@@ -61,7 +61,9 @@ namespace node
         private string _dataTimee;
         private DateTime _datePointer;
         private TaskRepository _tasklistRepository;
+        private JecubNode.Repository.TodoRepository _todolistRepository;
         private TaskRepository TasklistRepository { get => _tasklistRepository; set => _tasklistRepository = value; }
+        private JecubNode.Repository.TodoRepository TodolistRepository { get => _todolistRepository; set => _todolistRepository = value; }
 
         public TododoViewModel(TaskRepository taskRepository)
         {

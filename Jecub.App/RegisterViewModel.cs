@@ -41,9 +41,10 @@ namespace Jecub.App
                         Password = PasswordUser
                     };
                     userRepository.Register(user);
+                    MessageBox.Show(userRepository.Register(user).Status.ToString());
 
-                        
-                    }));
+
+                }));
             }
         }
         public RelayCommand LoginCommand
@@ -59,7 +60,7 @@ namespace Jecub.App
                         Password = PasswordUser
                     };
                     userRepository.Login(user);
-                    MessageBox.Show(userRepository.Login(user).ToString());
+                    MessageBox.Show(userRepository.Login(user).Status.ToString());
 
                 }));
             }
