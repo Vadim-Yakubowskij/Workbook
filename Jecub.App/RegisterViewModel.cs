@@ -18,6 +18,9 @@ namespace Jecub.App
         private string _login;
         public string PasswordUser { get => _password; set { _password = value; OnPropertyChanged("PasswordUser"); } }
         private string _password;
+
+        public int UserId{ get; set; }
+
         private UserRepository userRepository;
         private RelayCommand registerCommand;
         private RelayCommand loginCommand;
@@ -41,7 +44,6 @@ namespace Jecub.App
                         Password = PasswordUser
                     };
                     userRepository.Register(user);
-                    MessageBox.Show(userRepository.Register(user).Status.ToString());
 
 
                 }));
@@ -59,13 +61,16 @@ namespace Jecub.App
                         Login = LoginUser,
                         Password = PasswordUser
                     };
-                    userRepository.Login(user);
-                    MessageBox.Show(userRepository.Login(user).Status.ToString());
-
+                    Task.Run(()=>DoLogin(user)).Wait();
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.Show();
                 }));
             }
         }
 
-
+        private async void DoLogin(User user)
+        {
+            UserId = await userRepository.Login(user);
+        }
     }
 }

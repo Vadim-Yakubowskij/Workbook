@@ -1,4 +1,5 @@
 ﻿using DataBase.Repository;
+using JecubNode.Repository;
 using node;
 using System.Text;
 using System.Windows;
@@ -23,10 +24,10 @@ namespace Jecub.App
         public static UpdateWin UpdateWindow;
         TaskRepository taskRepository = new TaskRepository();
         TododoViewModel vm;
-        public MainWindow()
+        public MainWindow(int userId)
         {
             InitializeComponent();
-            vm = new TododoViewModel(taskRepository);
+            vm = new TododoViewModel(taskRepository,userId);
             DataContext = vm;
         }
 

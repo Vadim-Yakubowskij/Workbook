@@ -5,7 +5,7 @@
 namespace JecubNode.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,8 @@ namespace JecubNode.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Date_time = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    More_details = table.Column<string>(type: "TEXT", nullable: false)
+                    More_details = table.Column<string>(type: "TEXT", nullable: false),
+                    User_Id = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

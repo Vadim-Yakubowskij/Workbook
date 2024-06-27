@@ -13,32 +13,34 @@ using System.Windows.Markup;
 using System.Xml.Linq;
 using System.Security.Cryptography;
 using Jecub.App;
+using JecubNode.Repository;
+using JecubNode;
 
 namespace node
 {
     public class TododoViewModel : ObservableObject
     {
-        private ObservableCollection<Task> _taskListSunday;
-        public ObservableCollection<Task> TaskListSunday { get => _taskListSunday; set { _taskListSunday = value; OnPropertyChanged("TaskListSunday"); } }
+        private ObservableCollection<Todo> _taskListSunday;
+        public ObservableCollection<Todo> TaskListSunday { get => _taskListSunday; set { _taskListSunday = value; OnPropertyChanged("TaskListSunday"); } }
 
-        private ObservableCollection<Task> _taskListMonday;
-        public ObservableCollection<Task> TaskListMonday { get => _taskListMonday; set { _taskListMonday = value; OnPropertyChanged("TaskListMonday"); } }
+        private ObservableCollection<Todo> _taskListMonday;
+        public ObservableCollection<Todo> TaskListMonday { get => _taskListMonday; set { _taskListMonday = value; OnPropertyChanged("TaskListMonday"); } }
 
-        private ObservableCollection<Task> _taskListTuesday;
-        public ObservableCollection<Task> TaskListTuesday { get => _taskListTuesday; set { _taskListTuesday = value; OnPropertyChanged("TaskListTuesday"); } }
+        private ObservableCollection<Todo> _taskListTuesday;
+        public ObservableCollection<Todo> TaskListTuesday { get => _taskListTuesday; set { _taskListTuesday = value; OnPropertyChanged("TaskListTuesday"); } }
 
-        private ObservableCollection<Task> _taskListWedessday;
-        public ObservableCollection<Task> TaskListWednesday { get => _taskListWedessday; set { _taskListWedessday = value; OnPropertyChanged("TaskListWednesday"); } }
+        private ObservableCollection<Todo> _taskListWedessday;
+        public ObservableCollection<Todo> TaskListWednesday { get => _taskListWedessday; set { _taskListWedessday = value; OnPropertyChanged("TaskListWednesday"); } }
 
-        private ObservableCollection<Task> _taskListThursday;
-        public ObservableCollection<Task> TaskListThursday { get => _taskListThursday; set { _taskListThursday = value; OnPropertyChanged("TaskListThursday"); } }
+        private ObservableCollection<Todo> _taskListThursday;
+        public ObservableCollection<Todo> TaskListThursday { get => _taskListThursday; set { _taskListThursday = value; OnPropertyChanged("TaskListThursday"); } }
 
-        private ObservableCollection<Task> _taskListFriday;
-        public ObservableCollection<Task> TaskListFriday { get => _taskListFriday; set { _taskListFriday = value; OnPropertyChanged("TaskListFriday"); } }
+        private ObservableCollection<Todo> _taskListFriday;
+        public ObservableCollection<Todo> TaskListFriday { get => _taskListFriday; set { _taskListFriday = value; OnPropertyChanged("TaskListFriday"); } }
 
-        private ObservableCollection<Task> _taskListSaturday;
-        public ObservableCollection<Task> TaskListSaturday { get => _taskListSaturday; set { _taskListSaturday = value; OnPropertyChanged("TaskListSaturday"); } }
-        public Task SelectedTask { 
+        private ObservableCollection<Todo> _taskListSaturday;
+        public ObservableCollection<Todo> TaskListSaturday { get => _taskListSaturday; set { _taskListSaturday = value; OnPropertyChanged("TaskListSaturday"); } }
+        public Todo SelectedTask { 
             get => _selectedTask; 
             set { 
                 _selectedTask = value;
@@ -55,17 +57,17 @@ namespace node
         private string _info;
         public DateTime Date { get => _date; set { _date = value.Date; OnPropertyChanged("Date"); } }
         private DateTime _date;
-        private List<Task> tasks;
-        private Task _selectedTask;
+        private List<Todo> tasks;
+        private Todo _selectedTask;
         
         private string _dataTimee;
         private DateTime _datePointer;
         private TaskRepository _tasklistRepository;
-        private JecubNode.Repository.TodoRepository _todolistRepository;
         private TaskRepository TasklistRepository { get => _tasklistRepository; set => _tasklistRepository = value; }
-        private JecubNode.Repository.TodoRepository TodolistRepository { get => _todolistRepository; set => _todolistRepository = value; }
 
-        public TododoViewModel(TaskRepository taskRepository)
+        public int UserId{ get; set; }
+
+        public TododoViewModel(TaskRepository taskRepository, int userId)
         {
             Date = DateTime.Now;
             DateTime today = DateTime.Today;
@@ -77,16 +79,22 @@ namespace node
             string monday = DataTimee.Split(" - ", StringSplitOptions.None)[0];
             string sunday = DataTimee.Split(" - ", StringSplitOptions.None)[1];
             TasklistRepository = taskRepository;
-            UpdateWeekDays(TasklistRepository.read());
+            UserId = userId;
+            System.Threading.Tasks.Task.Run(() => Update()).Wait();
 
         }
 
-        private void UpdateWeekDays(List<Task> tasks)
+        private async void Update()
         {
-            List<Task> tmp = new List<Task>();
+            UpdateWeekDays(await TasklistRepository.read(UserId));
+        }
+
+        private void UpdateWeekDays(List<Todo> tasks)
+        {
+            List<Todo> tmp = new List<Todo>();
             tasks.ForEach(x =>
             {
-                tmp.Add(new Task(x));
+                tmp.Add(new Todo(x));
             });
 
             for (int i = 0; i < tmp.Count(); i++)
@@ -107,14 +115,14 @@ namespace node
             }).ToList();
 
 
-            Dictionary<DayOfWeek, List<Task>> tasksByDayOfWeek = new Dictionary<DayOfWeek, List<Task>>();
+            Dictionary<DayOfWeek, List<Todo>> tasksByDayOfWeek = new Dictionary<DayOfWeek, List<Todo>>();
 
             foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
             {
-                tasksByDayOfWeek[dayOfWeek] = new List<Task>();
+                tasksByDayOfWeek[dayOfWeek] = new List<Todo>();
             }
 
-            foreach (Task task in tmp)
+            foreach (Todo task in tmp)
             {
                 string[] splitted = task.Date_time.Split('.');
                 DateTime date = new DateTime(int.Parse(splitted[0]), int.Parse(splitted[1]), int.Parse(splitted[2]));
@@ -122,13 +130,13 @@ namespace node
                 tasksByDayOfWeek[dayOfWeek].Add(task);
             }
 
-            TaskListMonday = new ObservableCollection<Task>(tasksByDayOfWeek[DayOfWeek.Monday]);
-            TaskListTuesday = new ObservableCollection<Task>(tasksByDayOfWeek[DayOfWeek.Tuesday]);
-            TaskListWednesday = new ObservableCollection<Task>(tasksByDayOfWeek[DayOfWeek.Wednesday]);
-            TaskListThursday = new ObservableCollection<Task>(tasksByDayOfWeek[DayOfWeek.Thursday]);
-            TaskListFriday = new ObservableCollection<Task>(tasksByDayOfWeek[DayOfWeek.Friday]);
-            TaskListSaturday = new ObservableCollection<Task>(tasksByDayOfWeek[DayOfWeek.Saturday]);
-            TaskListSunday = new ObservableCollection<Task>(tasksByDayOfWeek[DayOfWeek.Sunday]);
+            TaskListMonday = new ObservableCollection<Todo>(tasksByDayOfWeek[DayOfWeek.Monday]);
+            TaskListTuesday = new ObservableCollection<Todo>(tasksByDayOfWeek[DayOfWeek.Tuesday]);
+            TaskListWednesday = new ObservableCollection<Todo>(tasksByDayOfWeek[DayOfWeek.Wednesday]);
+            TaskListThursday = new ObservableCollection<Todo>(tasksByDayOfWeek[DayOfWeek.Thursday]);
+            TaskListFriday = new ObservableCollection<Todo>(tasksByDayOfWeek[DayOfWeek.Friday]);
+            TaskListSaturday = new ObservableCollection<Todo>(tasksByDayOfWeek[DayOfWeek.Saturday]);
+            TaskListSunday = new ObservableCollection<Todo>(tasksByDayOfWeek[DayOfWeek.Sunday]);
             
         }
 
@@ -172,7 +180,7 @@ namespace node
                         int month = _datePointer.Month;
                         int year = _datePointer.Year;
                         DataTimee = GetCurrentWeekDay($"{day:00}.{month:00}.{year:00}");
-                        UpdateWeekDays(TasklistRepository.read());
+                        Update();
                     }));
             }
         }
@@ -190,7 +198,7 @@ namespace node
                         int month = _datePointer.Month;
                         int year = _datePointer.Year;
                         DataTimee = GetCurrentWeekDay($"{day:00}.{month:00}.{year:00}");
-                        UpdateWeekDays(TasklistRepository.read());
+                        Update();
                     }));
             }
         }

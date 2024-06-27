@@ -22,9 +22,10 @@ namespace Jecub.Controllers
 
         // GET: api/Todoes
         [HttpGet("/Read")]
-        public async Task<ActionResult<IEnumerable<Todo>>> GetTask()
+        public async Task<ActionResult<IEnumerable<Todo>>> GetTask(int id)
         {
-            return Ok(await _context.Task.ToListAsync());
+            List<Todo> tmp = await _context.Task.ToListAsync();
+            return Ok(tmp.Where(x=>x.User_Id == id).ToList());
         }
 
         // GET: api/Todoes/5
